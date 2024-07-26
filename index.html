@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #343a40;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .pedido {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .pedido p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buscar Pedido</h1>
+    <form id="searchForm">
+        <input type="number" id="pedidoId" placeholder="Número de Pedido" required>
+        <button type="submit">Buscar</button>
+    </form>
+    <div id="pedidoResultado" class="pedido" style="display: none;">
+        <h2>Detalles del Pedido</h2>
+        <p><strong>ID del Pedido:</strong> <span id="idPedido"></span></p>
+        <p><strong>Cliente:</strong> <span id="nombreCliente"></span></p>
+        <p><strong>Producto:</strong> <span id="nombreProducto"></span></p>
+        <p><strong>Unidades:</strong> <span id="unidades"></span></p>
+        <p><strong>Precio Total:</strong> $<span id="precioTotal"></span></p>
+    </div>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const pedidoId = document.getElementById('pedidoId').value;
+
+            fetch(`/api/pedidos/${pedidoId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('idPedido').textContent = data.pedido.id;
+                        document.getElementById('nombreCliente').textContent = data.pedido.cliente;
+                        document.getElementById('nombreProducto').textContent = data.pedido.producto;
+                        document.getElementById('unidades').textContent = data.pedido.unidades;
+                        document.getElementById('precioTotal').textContent = data.pedido.precio_total.toFixed(2);
+
+                        document.getElementById('pedidoResultado').style.display = 'block';
+                    } else {
+                        alert('Pedido no encontrado.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al buscar el pedido.');
+                });
+        });
+    </script>
+</body>
+</html>
