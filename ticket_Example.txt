@@ -1,0 +1,7 @@
+===== TICKET DE COMPRA =====
+ID del Pedido: 5
+Cliente: Gaspar
+Producto: Hamburguesa
+Unidades: 2
+Precio Total: $170.00
+=============================
